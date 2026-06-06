@@ -1,5 +1,5 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai
 from PIL import Image
 import json
 import pandas as pd
@@ -66,9 +66,6 @@ Panduan:
 """
 
 def clean_json_text(text):
-    """
-    Buang markdown code block dan cuba ambil bahagian JSON sahaja.
-    """
     text = text.replace("```json", "").replace("```", "").strip()
 
     match = re.search(r"\{.*\}", text, re.DOTALL)
@@ -91,19 +88,15 @@ if st.button("🚀 Ekstrak Data"):
         st.stop()
 
     try:
-        genai.configure(api_key=api_key)
-
-        model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            generation_config={
-                "temperature": 0.2
-            }
-        )
+        client = genai.Client(api_key=api_key)
 
         image = Image.open(uploaded_file)
 
         with st.spinner("AI sedang memproses gambar..."):
-            response = model.generate_content([default_prompt, image])
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=[image, default_prompt]
+            )
 
             raw_text = response.text
             cleaned_text = clean_json_text(raw_text)
@@ -125,7 +118,6 @@ if st.button("🚀 Ekstrak Data"):
 
             df = pd.DataFrame(items)
 
-            # Tambah maklumat ringkasan ke dalam setiap baris
             df.insert(0, "Nama Resipi", summary.get("Nama Resipi", "Tidak dinyatakan"))
             df.insert(1, "Kategori", summary.get("Kategori", "Tidak dinyatakan"))
 
@@ -138,7 +130,6 @@ if st.button("🚀 Ekstrak Data"):
             st.subheader("📋 Senarai Bahan")
             st.dataframe(df, use_container_width=True)
 
-            # Download Excel
             buffer = io.BytesIO()
             with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
                 df.to_excel(writer, index=False, sheet_name="Bahan Bakeri")
