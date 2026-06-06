@@ -66,18 +66,4 @@ uploaded_file = st.file_uploader(
 )
 
 # --- DEFAULT BAKERY PROMPT ---
-default_prompt = """Anda adalah pakar sains makanan dan bakeri AI. Analisis gambar yang dimuat naik (sama ada teks resipi, senarai barang, atau gambar bahan mentah) dan ekstrak maklumat bahan ke dalam format JSON yang berstruktur.
-
-Respons JSON anda mesti mengikut skema yang tepat ini:
-{
-  "summary_fields": {
-    "Nama Resipi / Tajuk": "Nama resipi atau tajuk dokumen yang dikesan",
-    "Kategori": "Kategori produk (cth: Bakeri / Pastri)"
-  },
-  "extracted_items": [
-    {
-      "Nama Bahan": "Nama bahan mentah (cth: Tepung Gandum, Yis, Susu Segar, Mentega)",
-      "Jenis": "Jenis fizikal bahan (cth: Pepejal, Cecair, Serbuk, Gel)",
-      "Kegunaan (Donut)": "Fungsi/kegunaan bahan ini khusus dalam pembuatan Donut",
-      "Kegunaan (Ban)": "Fungsi/kegunaan bahan ini khusus dalam pembuatan Ban (Roti)",
-      "Kegunaan (Piza)": "Fungsi/
+default_prompt = """Anda adalah pakar sains makanan dan bakeri AI. Analisis gambar yang dimuat naik (sama ada teks resipi,
